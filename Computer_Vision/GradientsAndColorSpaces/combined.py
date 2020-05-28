@@ -4,15 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 
-# Read in an image and grayscale it
-image = mpimg.imread('signs_vehicles_xygrad.png')
-
-# Define a function that applies Sobel x or y, 
-# then takes an absolute value and applies a threshold.
-# Note: calling your function with orient='x', thresh_min=20, thresh_max=100
-# should produce output like the example image shown above this quiz.
-def abs_sobel_thresh(img, orient='x', thresh_min=0, thresh_max=255):
-    
+def abs_sobel_thresh(img, orient='x', sobel_kernel=3, thresh=(0, 255)):
     # Apply the following steps to img
     # 1)    Convert to grayscale
     gray = cv2.cvtColor(img ,cv2.COLOR_RGB2GRAY)    
@@ -36,15 +28,25 @@ def abs_sobel_thresh(img, orient='x', thresh_min=0, thresh_max=255):
     
     return grad_binary
 
-    
-# Run the function
-grad_binary = abs_sobel_thresh(image, orient='y', thresh_min=20, thresh_max=100)
-# Plot the result
-f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
-f.tight_layout()
-ax1.imshow(image)
-ax1.set_title('Original Image', fontsize=10)
-ax2.imshow(grad_binary, cmap='gray')
-ax2.set_title('Thresholded Gradient', fontsize=10)
-plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
-plt.show()
+    return grad_binary
+
+def mag_thresh(image, sobel_kernel=3, mag_thresh=(0, 255)):
+    # Calculate gradient magnitude
+    # Apply threshold
+    return mag_binary
+
+def dir_threshold(image, sobel_kernel=3, thresh=(0, np.pi/2)):
+    # Calculate gradient direction
+    # Apply threshold
+    return dir_binary
+
+# Read in an image and grayscale it
+img = mpimg.imread('signs_vehicles_xygrad.png')
+# Choose a Sobel kernel size
+ksize = 3 # Choose a larger odd number to smooth gradient measurements
+
+# Apply each of the thresholding functions
+gradx = abs_sobel_thresh(image, orient='x', sobel_kernel=ksize, thresh=(0, 255))
+grady = abs_sobel_thresh(image, orient='y', sobel_kernel=ksize, thresh=(0, 255))
+mag_binary = mag_thresh(image, sobel_kernel=ksize, mag_thresh=(0, 255))
+dir_binary = dir_threshold(image, sobel_kernel=ksize, thresh=(0, np.pi/2))
